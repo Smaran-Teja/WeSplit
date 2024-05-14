@@ -8,20 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    var students = ["A", "B", "C"]
-    
-    
-    @State
-    private var selectedStudent = "A"
+    @State private var checkAmount = 0.0
+    @State private var numberOfPeople = 2
+    @State private var tipPercentage = 20
     
     var body: some View {
-        NavigationStack {
-            Form {
-                Picker("Select your student", selection: $selectedStudent) {
-                    ForEach(students, id: \.self) {
-                        Text($0)
-                    }
-                }
+        Form {
+            Section {
+                TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    .keyboardType(.decimalPad)
+            }
+
+            Section {
+                Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
             }
         }
     }
