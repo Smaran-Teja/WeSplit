@@ -8,23 +8,20 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State 
-    private var nameText = ""
+    var students = ["A", "B", "C"]
     
     
     @State
-    private var hobbyText = ""
+    private var selectedStudent = "A"
     
     var body: some View {
-        Form {
-            Section {
-                TextField("Enter name here", text: $nameText)
-                Text((nameText != "") ? "Your name is \(nameText)" : "")
-            }
-            Section {
-                TextField("Enter hobby here", text: $hobbyText)
-                Text((hobbyText != "") ? "Your hobby is \(hobbyText)" : "")
+        NavigationStack {
+            Form {
+                Picker("Select your student", selection: $selectedStudent) {
+                    ForEach(students, id: \.self) {
+                        Text($0)
+                    }
+                }
             }
         }
     }
