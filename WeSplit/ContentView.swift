@@ -15,28 +15,22 @@ struct ContentView: View {
     
     private let tipPercentages = [0, 5, 10, 15, 20]
     
+    
+    var totalWithTip: Double {
+        checkAmount + (Double(tipPercentage)/100.0) * checkAmount
+    }
     var totalPerPerson: Double {
         let numPeople = numberPeopleIdx + 2
-        let totalAmt = checkAmount + (Double(tipPercentage)/100.0) * checkAmount
-        return totalAmt/Double(numPeople)
+        return totalWithTip/Double(numPeople)
     }
     
     var body: some View {
         NavigationStack{
             Form {
-                Section ("Total amount"){
+                Section ("Check amount"){
                     TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
-                }
-                
-                Section ("Number of people") {
-                    Picker("Number of people", selection: $numberPeopleIdx) {
-                        ForEach(2..<20) {
-                            Text("\($0) people")
-                        }
-                    }
-                    .pickerStyle(.wheel)
                 }
                 
                 Section ("Tip percentage") {
@@ -47,16 +41,27 @@ struct ContentView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    
+                    Text("Total bill: \(totalWithTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+                }
+            
+                
+                Section ("Number of people") {
+                    Picker("Number of people", selection: $numberPeopleIdx) {
+                        ForEach(2..<20) {
+                            Text("\($0) people")
+                        }
+                    }
+                    .pickerStyle(.wheel)
                 }
                 
-                Section("You need to pay...") {
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                }
+                Text("You need to pay: \(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+
             }.navigationTitle("WeSplit")
              .toolbar {
                  if amountIsFocused {
                     Button("Done") {
-                        amountIsFocused = false
+                        amountIsFocused.toggle()
                     }
                 }
             }
