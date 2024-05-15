@@ -9,10 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var checkAmount = 0.0
-    @State private var numberOfPeople = 0
+    @State private var numberPeopleIdx = 0 // 2 people by default
     @State private var tipPercentage = 20
     
     private let tipPercentages = [0, 5, 10, 15, 20]
+    
+    var totalPerPerson: Double {
+        let numPeople = numberPeopleIdx + 2
+        let totalAmt = checkAmount + (Double(tipPercentage)/100.0) * checkAmount
+        return totalAmt/Double(numPeople)
+    }
     
     var body: some View {
         NavigationStack{
@@ -23,7 +29,7 @@ struct ContentView: View {
                 }
                 
                 Section ("Number of people") {
-                    Picker("Number of people", selection: $numberOfPeople) {
+                    Picker("Number of people", selection: $numberPeopleIdx) {
                         ForEach(2..<20) {
                             Text("\($0) people")
                         }
@@ -42,7 +48,7 @@ struct ContentView: View {
                 }
                 
                 Section("You need to pay...") {
-                    Text(checkAmount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                    Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                 }
             }.navigationTitle("WeSplit")
         }
