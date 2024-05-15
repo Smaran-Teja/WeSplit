@@ -42,7 +42,9 @@ struct ContentView: View {
                     }
                     .pickerStyle(.segmented)
                     
-                    Text("Total bill: \(totalWithTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+                    if (checkAmount != 0 && tipPercentage != 0) {
+                        Text("Total bill: \(totalWithTip, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))")
+                    }
                 }
             
                 
